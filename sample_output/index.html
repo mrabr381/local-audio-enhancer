@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Local Audio Enhancer — Sample Report</title>
+<style>
+  body { font-family: system-ui, -apple-system, sans-serif; max-width: 860px; margin: 2rem auto; padding: 0 1rem; line-height: 1.55; color: #1f2937; }
+  h1 { font-size: 1.6rem; } h2 { font-size: 1.2rem; margin-top: 2rem; }
+  table { border-collapse: collapse; width: 100%; margin: 1rem 0; }
+  th, td { border: 1px solid #d1d5db; padding: .5rem .75rem; text-align: left; }
+  th { background: #f3f4f6; }
+  .good { color: #166534; font-weight: 600; }
+  .wave { width: 100%; height: auto; border: 1px solid #e5e7eb; border-radius: 8px; }
+  .note { background: #fefce8; border: 1px solid #fde68a; border-radius: 8px; padding: .75rem 1rem; }
+  code { background: #f3f4f6; padding: .1rem .35rem; border-radius: 4px; }
+  footer { margin-top: 2.5rem; color: #6b7280; font-size: .9rem; }
+</style>
+</head>
+<body>
+<h1>🎙️ Local Audio Enhancer — Sample Report</h1>
+<p>Free, local voice/audio cleanup: trim silence, remove background noise,
+normalise loudness. No upload, no account, no subscription.
+<a href="https://github.com/mrabr381/local-audio-enhancer">GitHub repo</a></p>
+
+<h2>Before / after — measured, not estimated</h2>
+<p>Sample: synthetic voice-like syllables + white noise, rumble and 50&nbsp;Hz hum
+(fully synthetic — no real person's voice). Measured with ffmpeg
+<code>loudnorm</code> (ITU-R BS.1770), verified 2026-11-20.</p>
+<table>
+  <tr><th>Measurement</th><th>Before</th><th>After</th></tr>
+  <tr><td>Integrated loudness</td><td>−15.45 LUFS</td><td class="good">−15.99 LUFS (target −16)</td></tr>
+  <tr><td>Noise floor</td><td>−20.22 dBFS</td><td class="good">−30.54 dBFS (−10.32 dB)</td></tr>
+  <tr><td>True peak</td><td>−1.36 dBFS</td><td>−1.95 dBFS (no clipping)</td></tr>
+  <tr><td>Duration</td><td>4.88 s</td><td>4.88 s</td></tr>
+  <tr><td>RMS level</td><td>−15.44 dBFS</td><td>−15.32 dBFS</td></tr>
+</table>
+<p>Word-preservation check: in voiced regions the enhanced audio correlates
+<strong>0.975</strong> with the known-clean reference; gap (between-words)
+RMS fell from 0.099 to 0.033 — noise went down, words stayed.</p>
+
+<h2>Waveform</h2>
+<img class="wave" src="waveform.svg" alt="Before/after waveform: noisy input on top, cleaned audio below">
+
+<h2>Try it yourself</h2>
+<pre><code>git clone https://github.com/mrabr381/local-audio-enhancer.git
+cd local-audio-enhancer
+python -m venv .venv &amp;&amp; source .venv/bin/activate
+pip install -r requirements.txt
+python scripts/make_sample.py
+python -m audio_enhance --input sample_data/noisy.wav --out sample_output/</code></pre>
+
+<div class="note"><strong>Note:</strong> the sample audio files are binary and are
+not in the repo — <code>scripts/make_sample.py</code> regenerates them.
+The files below are the text-only record: the full report, the waveform
+data, and the waveform image.</div>
+
+<h2>Downloads</h2>
+<ul>
+  <li><a href="report.md">report.md</a> — full measured report</li>
+  <li><a href="waveform.csv">waveform.csv</a> — waveform data as text (805 rows)</li>
+  <li><a href="waveform.svg">waveform.svg</a> — before/after waveform image</li>
+</ul>
+
+<footer>Local Audio Enhancer — MIT License · 100% local · by
+<a href="https://github.com/mrabr381">mrabr381</a></footer>
+</body>
+</html>
